@@ -28,8 +28,12 @@
       </md-toolbar>
 
       <md-layout md-gutter>
-        <md-layout md-flex-offset="25">
+        <md-layout md-flex-offset="25" md-column>
+          <!-- prefixes UI -->
           <prefixes-list v-bind:prefixes="prefixes"></prefixes-list>
+
+          <!-- done button -->
+          <md-button v-on:click="execute()">Execute</md-button>
         </md-layout>
         <md-layout md-flex="25"></md-layout>
       </md-layout>
@@ -43,7 +47,7 @@
 
       <md-layout>
         <div style="padding-top: 20px;" v-if="!prefixes.length">No prefixes defined..</div>
-        <md-chip v-for="prefix in prefixes" md-deletable v-on:delete="deleteChip(prefix)">
+        <md-chip v-for="prefix in prefixes" md-deletable v-on:delete="deleteChip(prefix)" style="margin-left: 3px">
           {{ prefix.label }}
           <md-tooltip md-direction="bottom">{{ prefix.namespace }}</md-tooltip>
         </md-chip>

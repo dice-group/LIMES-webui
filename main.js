@@ -35,4 +35,24 @@ let app = new Vue({
   data: {
     prefixes: [],
   },
+  methods: {
+    execute() {
+      const configHeader = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+`;
+      const configFooter = `</LIMES>`;
+
+      const prefixes = this.prefixes.map(
+        p => `<PREFIX>
+  <NAMESPACE>${p.namespace}</NAMESPACE>
+  <LABEL>${p.label}</LABEL>
+</PREFIX>
+`
+      );
+
+      const config = configHeader + prefixes.join('') + configFooter;
+      console.log(config);
+    },
+  },
 });
