@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>LIMES Web UI</title>
+
+  <meta charset="utf-8">
+  <meta name="description" content="LIMES Web UI">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <!-- styles -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://unpkg.com/vue-material@0.8.1/dist/vue-material.css">
+</head>
+
+<body>
+  <div id="app">
+    Loading..
+  </div>
+
+  <!-- templates -->
+  <!-- main app template -->
+  <script type="text/x-template" id="mainApp">
+    <div>
+      <md-toolbar>
+        <h2 class="md-title" style="flex: 1">LIMES Web UI</h2>
+      </md-toolbar>
+
+      <md-layout md-gutter>
+        <md-layout md-flex-offset="25">
+          <prefixes-list v-bind:prefixes="prefixes"></prefixes-list>
+        </md-layout>
+        <md-layout md-flex="25"></md-layout>
+      </md-layout>
+    </div>
+  </script>
+
+  <!-- prefixes component -->
+  <script type="text/x-template" id="prefixComponent">
+    <md-whiteframe md-tag="section" style="margin-top: 20px; flex: 1; padding-top: 15px; padding-left: 15px;">
+      <div class="md-title">Prefixes</div>
+
+      <md-layout>
+        <div style="padding-top: 20px;" v-if="!prefixes.length">No prefixes defined..</div>
+        <md-chip v-for="prefix in prefixes" md-deletable v-on:delete="deleteChip(prefix)">
+          {{ prefix.label }}
+          <md-tooltip md-direction="bottom">{{ prefix.namespace }}</md-tooltip>
+        </md-chip>
+      </md-layout>
+
+      <md-layout md-gutter="8">
+        <md-layout md-flex="33">
+          <md-input-container>
+            <label>Label</label>
+            <md-input v-model="label" placeholder="Label"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex>
+          <md-input-container>
+            <label>Namespace</label>
+            <md-input v-model="namespace" placeholder="Namespace"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex="25">
+          <md-button v-on:click="add()">Add</md-button>
+        </md-layout>
+      </md-layout>
+    </md-whiteframe>
+  </script>
+
+  <!-- libs -->
+  <script src="https://unpkg.com/vue@2.5.3/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
+  <!-- our scripts -->
+  <script src="main.js"></script>
+</body>
+
+</html>
