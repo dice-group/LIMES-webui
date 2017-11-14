@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://unpkg.com/vue-material@0.8.1/dist/vue-material.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
 </head>
 
 <body>
@@ -30,7 +31,7 @@
       <md-dialog ref="configDialog">
         <md-dialog-title>Config XML</md-dialog-title>
 
-        <md-dialog-content><pre>{{ configText }}</pre></md-dialog-content>
+        <md-dialog-content><pre><code class="xml">{{ configText }}</code></pre></md-dialog-content>
 
         <md-dialog-actions>
           <md-button class="md-primary" @click="closeConfig()">Close</md-button>
@@ -237,6 +238,8 @@
   <!-- libs -->
   <script src="https://unpkg.com/vue@2.5.3/dist/vue.min.js"></script>
   <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/xml.min.js"></script>
   <!-- our scripts -->
   <script src="prefixes.js"></script>
   <script src="mlalgorithm.js"></script>

@@ -140,6 +140,8 @@ let app = new Vue({
     showConfig() {
       this.configText = this.generateConfig();
       this.$refs.configDialog.open();
+      // syntax highlight for xml
+      setTimeout(() => hljs.highlightBlock(document.getElementsByTagName('code')[0]));
     },
     closeConfig() {
       this.$refs.configDialog.close();
