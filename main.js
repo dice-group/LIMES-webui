@@ -24,6 +24,10 @@ let app = new Vue({
   el: '#app',
   template: '#mainApp',
   data: {
+    // config display
+    display: false,
+    configText: '',
+    // config
     prefixes: [],
     source: {
       id: 'sourceId',
@@ -73,7 +77,7 @@ let app = new Vue({
     },
   },
   methods: {
-    execute() {
+    generateConfig() {
       const configHeader = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE LIMES SYSTEM "limes.dtd">
 <LIMES>
@@ -113,9 +117,9 @@ let app = new Vue({
   ${this.mlalgorithm.parameters
     .map(
       p => `<PARAMETER>
-    <NAME>${p.name}</NAME>
-    <VALUE>${p.value}</VALUE>
-  </PARAMETER>`
+  <NAME>${p.name}</NAME>
+  <VALUE>${p.value}</VALUE>
+</PARAMETER>`
     )
     .join('\n  ')}
 </MLALGORITHM>
@@ -131,7 +135,15 @@ let app = new Vue({
 
       const config =
         configHeader + prefixes + src + target + metrics + acceptance + review + ml + execution + configFooter;
-      console.log(config);
+      return config;
     },
+    showConfig() {
+      this.configText = this.generateConfig();
+      this.$refs.configDialog.open();
+    },
+    closeConfig() {
+      this.$refs.configDialog.close();
+    },
+    execute() {},
   },
 });

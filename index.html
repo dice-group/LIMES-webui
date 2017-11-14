@@ -27,6 +27,16 @@
         <h2 class="md-title" style="flex: 1">LIMES Web UI</h2>
       </md-toolbar>
 
+      <md-dialog ref="configDialog">
+        <md-dialog-title>Config XML</md-dialog-title>
+
+        <md-dialog-content><pre>{{ configText }}</pre></md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="closeConfig()">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
       <md-layout md-gutter>
         <md-layout md-flex-offset="25" md-column>
           <!-- prefixes UI -->
@@ -43,7 +53,14 @@
           <mlalgorithm-component v-bind:data="mlalgorithm"></mlalgorithm-component>
 
           <!-- done button -->
-          <md-button class="md-raised md-primary" v-on:click="execute()">Execute</md-button>
+          <md-layout md-gutter="16">
+            <md-layout>
+              <md-button class="md-raised md-flex" v-on:click="showConfig()">Display config</md-button>
+            </md-layout>
+            <md-layout>
+              <md-button class="md-raised md-primary md-flex" v-on:click="execute()">Execute</md-button>
+            </md-layout>
+          </md-layout>
         </md-layout>
         <md-layout md-flex="25"></md-layout>
       </md-layout>
