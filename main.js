@@ -8,7 +8,7 @@ const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
 <PAGESIZE>${data.pagesize}</PAGESIZE>
 <RESTRICTION>${data.restriction}</RESTRICTION>
 <TYPE>${data.type}</TYPE>
-${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`)}
+${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`).join('\n')}
 </${tag.toUpperCase()}>
 `;
 
@@ -54,6 +54,18 @@ let app = new Vue({
       file: 'reviewme.nt',
       relation: 'owl:sameAs',
     },
+    mlalgorithm: {
+      enabled: false,
+      name: 'simple ml',
+      type: 'supervised batch',
+      training: 'trainingData.nt',
+      parameters: [
+        {
+          name: 'max execution time in minutes',
+          value: 60,
+        },
+      ],
+    },
   },
   methods: {
     execute() {
@@ -63,28 +75,49 @@ let app = new Vue({
 `;
       const configFooter = `</LIMES>`;
 
-      const prefixes = this.prefixes.map(
-        p => `<PREFIX>
+      const prefixes = this.prefixes
+        .map(
+          p => `<PREFIX>
   <NAMESPACE>${p.namespace}</NAMESPACE>
   <LABEL>${p.label}</LABEL>
 </PREFIX>
 `
-      );
+        )
+        .join('');
 
       const src = makeDatasource(this.source, 'SOURCE');
       const target = makeDatasource(this.target, 'TARGET');
 
-      const metrics = this.metrics.map(
-        m => `<METRIC>
+      const metrics = this.metrics
+        .map(
+          m => `<METRIC>
   ${m}
 </METRIC>
 `
-      );
+        )
+        .join('');
 
       const acceptance = makeAccReview(this.acceptance, 'ACCEPTANCE');
       const review = makeAccReview(this.review, 'REVIEW');
 
-      const config = configHeader + prefixes.join('') + src + target + metrics + acceptance + review + configFooter;
+      const ml = this.mlalgorithm.enabled
+        ? `<MLALGORITHM>
+  <NAME>${this.mlalgorithm.name}</NAME>
+  <TYPE>${this.mlalgorithm.type}</TYPE>
+  <TRAINING>${this.mlalgorithm.training}</TRAINING>
+  ${this.mlalgorithm.parameters
+    .map(
+      p => `<PARAMETER>
+    <NAME>${p.name}</NAME>
+    <VALUE>${p.value}</VALUE>
+  </PARAMETER>`
+    )
+    .join('\n  ')}
+</MLALGORITHM>
+`
+        : '';
+
+      const config = configHeader + prefixes + src + target + metrics + acceptance + review + ml + configFooter;
       console.log(config);
     },
   },

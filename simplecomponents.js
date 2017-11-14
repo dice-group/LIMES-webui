@@ -13,5 +13,5 @@ Vue.component('metrics-component', {
 // Define a new component for metric
 Vue.component('accreview-component', {
   template: '#accreviewComponent',
-  props: ['data'],
+  props: ['data', 'title'],
 });

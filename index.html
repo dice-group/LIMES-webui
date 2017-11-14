@@ -39,6 +39,8 @@
           <!-- acceptance UI -->
           <accreview-component v-bind:data="acceptance" title="Acceptance Condition"></accreview-component>
           <accreview-component v-bind:data="review" title="Review Condition"></accreview-component>
+          <!-- machine learning UI -->
+          <mlalgorithm-component v-bind:data="mlalgorithm"></mlalgorithm-component>
 
           <!-- done button -->
           <md-button class="md-raised md-primary" v-on:click="execute()">Execute</md-button>
@@ -141,7 +143,7 @@
   </script>
 
   <!-- acceptance / review component -->
-  <script type="text/x-template" id="accreview">
+  <script type="text/x-template" id="accreviewComponent">
     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
       <div class="md-title">{{ title }}</div>
 
@@ -160,11 +162,67 @@
     </md-whiteframe>
   </script>
 
+  <!-- mlalgorithm component -->
+  <script type="text/x-template" id="mlalgorithmComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <md-layout>
+        <md-layout md-flex="75" style="align-items: center;">
+          <div class="md-title" style="height: 26px;">
+            Machine Learning
+          </div>
+        </md-layout>
+        <md-layout>
+          <md-button v-on:click="enable()" v-if="!data.enabled">Enable</md-button>
+          <md-button v-on:click="disable()" v-if="data.enabled">Disable</md-button>
+        </md-layout>
+      </md-layout>
+
+      <md-input-container v-if="data.enabled">
+        <label>Name</label>
+        <md-input v-model="data.name" placeholder="Name"></md-input>
+      </md-input-container>
+      <md-input-container v-if="data.enabled">
+        <label>Type</label>
+        <md-input v-model="data.type" placeholder="Type"></md-input>
+      </md-input-container>
+      <md-input-container v-if="data.enabled">
+        <label>Training</label>
+        <md-input v-model="data.training" placeholder="Training"></md-input>
+      </md-input-container>
+
+      <md-layout v-if="data.enabled">
+        <div style="padding-top: 20px;" v-if="!data.parameters.length">No parameters defined..</div>
+        <md-chip v-for="param in data.parameters" md-deletable v-on:delete="deleteParam(param)" style="margin-left: 3px">
+          {{ param.name }}: {{ param.value }}
+        </md-chip>
+      </md-layout>
+      <md-layout md-gutter="8" v-if="data.enabled">
+        <md-layout md-flex="33">
+          <md-input-container>
+            <label>Name</label>
+            <md-input v-model="name" placeholder="Name"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex>
+          <md-input-container>
+            <label>Value</label>
+            <md-input v-model="value" placeholder="Value"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout md-flex="25">
+          <md-button v-on:click="add()">Add</md-button>
+        </md-layout>
+      </md-layout>
+
+    </md-whiteframe>
+  </script>
+
   <!-- libs -->
   <script src="https://unpkg.com/vue@2.5.3/dist/vue.min.js"></script>
   <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
   <!-- our scripts -->
   <script src="prefixes.js"></script>
+  <script src="mlalgorithm.js"></script>
   <script src="simplecomponents.js"></script>
   <script src="main.js"></script>
 </body>
