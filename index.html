@@ -26,6 +26,7 @@
     <div>
       <md-toolbar>
         <h2 class="md-title" style="flex: 1">LIMES Web UI</h2>
+        <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
       </md-toolbar>
 
       <md-dialog ref="configDialog">
@@ -151,6 +152,10 @@
         <md-layout>
           Properties
           <md-chips v-model="source.properties" md-input-placeholder="Add a property"></md-chips>
+        </md-layout>
+        <md-layout>
+          Optional Properties
+          <md-chips v-model="source.optionalProperties" md-input-placeholder="Add an optional property"></md-chips>
         </md-layout>
       </md-layout>
     </md-whiteframe>

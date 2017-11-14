@@ -9,6 +9,7 @@ const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
 <RESTRICTION>${data.restriction}</RESTRICTION>
 <TYPE>${data.type}</TYPE>
 ${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`).join('\n')}
+${data.optionalProperties.map(p => `<OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n')}
 </${tag.toUpperCase()}>
 `;
 
@@ -37,6 +38,7 @@ let app = new Vue({
       restriction: '?src rdf:type some:Type',
       type: 'sparql',
       properties: ['dc:title AS lowercase RENAME name'],
+      optionalProperties: ['rdfs:label'],
     },
     target: {
       id: 'targetId',
@@ -46,6 +48,7 @@ let app = new Vue({
       restriction: '?target rdf:type other:Type',
       type: 'sparql',
       properties: ['foaf:name AS lowercase RENAME name'],
+      optionalProperties: ['rdf:type'],
     },
     metrics: ['trigrams(y.dc:title, x.linkedct:condition_name)'],
     acceptance: {
@@ -163,6 +166,59 @@ let app = new Vue({
         .then(r => {
           console.log(r);
         });
+    },
+    exampleConfig() {
+      this.prefixes = [
+        {
+          namespace: 'http://geovocab.org/geometry#',
+          label: 'geom',
+        },
+        {
+          namespace: 'http://www.opengis.net/ont/geosparql#',
+          label: 'geos',
+        },
+        {
+          namespace: 'http://linkedgeodata.org/ontology/',
+          label: 'lgdo',
+        },
+      ];
+      this.source = {
+        id: 'linkedgeodata',
+        endpoint: 'http://linkedgeodata.org/sparql',
+        var: '?x',
+        pagesize: 2000,
+        restriction: '?x a lgdo:RelayBox',
+        type: 'sparql',
+        properties: ['geom:geometry/geos:asWKT RENAME polygon'],
+        optionalProperties: ['rdfs:label'],
+      };
+      this.target = {
+        id: 'linkedgeodata',
+        endpoint: 'http://linkedgeodata.org/sparql',
+        var: '?y',
+        pagesize: 2000,
+        restriction: '?y a lgdo:RelayBox',
+        type: 'sparql',
+        properties: ['geom:geometry/geos:asWKT RENAME polygon'],
+        optionalProperties: ['rdfs:label'],
+      };
+      this.metrics = ['geo_hausdorff(x.polygon, y.polygon)'];
+      this.acceptance = {
+        threshold: 0.9,
+        file: 'lgd_relaybox_verynear.nt',
+        relation: 'lgdo:near',
+      };
+      this.review = {
+        threshold: 0.5,
+        file: 'lgd_relaybox_near.nt',
+        relation: 'lgdo:near',
+      };
+      this.execution = {
+        rewriter: 'DEFAULT',
+        planner: 'DEFAULT',
+        engine: 'DEFAULT',
+      };
+      this.output = 'TAB';
     },
   },
 });
