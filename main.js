@@ -7,7 +7,7 @@ const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
 <VAR>${data.var}</VAR>
 <PAGESIZE>${data.pagesize}</PAGESIZE>
 <RESTRICTION>${data.restriction}</RESTRICTION>
-<TYPE>${data.type}</TYPE>
+${data.type && data.type.length ? `<TYPE>${data.type}</TYPE>` : ''}
 ${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`).join('\n')}
 ${data.optionalProperties.map(p => `<OPTIONAL_PROPERTY>${p}</OPTIONAL_PROPERTY>`).join('\n')}
 </${tag.toUpperCase()}>
@@ -26,8 +26,13 @@ let app = new Vue({
   template: '#mainApp',
   data: {
     // config display
-    display: false,
     configText: '',
+    // execution progress
+    jobId: '',
+    jobRunning: false,
+    jobShowResult: false,
+    jobStatus: '-1',
+    jobStatusText: 'loading..',
     // config
     prefixes: [],
     source: {
@@ -153,6 +158,9 @@ let app = new Vue({
     closeConfig() {
       this.$refs.configDialog.close();
     },
+    closeStatus() {
+      this.$refs.jobDialog.close();
+    },
     execute() {
       const config = this.generateConfig();
       const configBlob = new Blob([config], {type: 'text/plain'});
@@ -164,7 +172,39 @@ let app = new Vue({
       })
         .then(r => r.text())
         .then(r => {
-          console.log(r);
+          this.jobId = r;
+          this.jobRunning = true;
+          this.jobStatusText = 'Status Loading - waiting for status from server..';
+          this.$refs.jobDialog.open();
+          setTimeout(() => this.getStatus(), 1000);
+        });
+    },
+    getStatus() {
+      fetch('http://localhost:1337/http://localhost:8080/get_status/?job_id=' + this.jobId)
+        .then(r => r.text())
+        .then(status => {
+          this.jobStatus = status;
+          if (status === '-1') {
+            this.jobRunning = false;
+            this.jobStatusText =
+              'Status Unknown - a configuration file for the given job_id has not been found on the server';
+          }
+          if (status === '0') {
+            this.jobRunning = true;
+            this.jobStatusText =
+              'Status Scheduled - the configuration file is present and the job is waiting for execution';
+            setTimeout(() => this.getStatus(), 5000);
+          }
+          if (status === '1') {
+            this.jobRunning = true;
+            this.jobStatusText = 'Status Running - the job is currently running';
+            setTimeout(() => this.getStatus(), 5000);
+          }
+          if (status === '2') {
+            this.jobRunning = false;
+            this.jobStatusText = 'Status Finished - the job is finished and its output files are ready for delivery';
+            this.jobShowResult = true;
+          }
         });
     },
     exampleConfig() {
@@ -188,7 +228,7 @@ let app = new Vue({
         var: '?x',
         pagesize: 2000,
         restriction: '?x a lgdo:RelayBox',
-        type: 'sparql',
+        type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
         optionalProperties: ['rdfs:label'],
       };
@@ -198,7 +238,7 @@ let app = new Vue({
         var: '?y',
         pagesize: 2000,
         restriction: '?y a lgdo:RelayBox',
-        type: 'sparql',
+        type: '',
         properties: ['geom:geometry/geos:asWKT RENAME polygon'],
         optionalProperties: ['rdfs:label'],
       };

@@ -29,6 +29,7 @@
         <md-button v-on:click="exampleConfig()">Try example LGD config</md-button>
       </md-toolbar>
 
+      <!-- config text dialog -->
       <md-dialog ref="configDialog">
         <md-dialog-title>Config XML</md-dialog-title>
 
@@ -36,6 +37,24 @@
 
         <md-dialog-actions>
           <md-button class="md-primary" @click="closeConfig()">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+
+      <!-- job status dialog -->
+      <md-dialog ref="jobDialog">
+        <md-dialog-title>Job status</md-dialog-title>
+
+        <md-dialog-content>
+          <md-progress-spinner v-if="jobRunning" md-mode="indeterminate"></md-progress-spinner>
+          {{ jobStatusText }}
+          <div v-if="jobShowResult">
+            <a v-bind:href=" 'http://localhost:8080/get_result/?job_id=' + jobId + '&result_type=acceptance' ">Acceptance</a>
+            <a v-bind:href=" 'http://localhost:8080/get_result/?job_id=' + jobId + '&result_type=review' ">Review</a>
+          </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="closeStatus()">Close</md-button>
         </md-dialog-actions>
       </md-dialog>
 
@@ -145,8 +164,8 @@
         </md-layout>
         <md-layout>
           <md-input-container>
-            <label>Type</label>
-            <md-input v-model="source.type" placeholder="Type"></md-input>
+            <label>Type (optional)</label>
+            <md-input v-model="source.type" placeholder="Type (optional)"></md-input>
           </md-input-container>
         </md-layout>
         <md-layout>
