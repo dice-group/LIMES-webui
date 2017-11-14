@@ -21,3 +21,9 @@ Vue.component('execution-component', {
   template: '#executionComponent',
   props: ['execution'],
 });
+
+// Define a new component for output
+Vue.component('output-component', {
+  template: '#outputComponent',
+  props: ['output'],
+});

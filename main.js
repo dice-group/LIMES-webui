@@ -75,6 +75,7 @@ let app = new Vue({
       planner: 'DEFAULT',
       engine: 'DEFAULT',
     },
+    output: 'TAB',
   },
   methods: {
     generateConfig() {
@@ -133,8 +134,11 @@ let app = new Vue({
 </EXECUTION>
 `;
 
+      const output = `<OUTPUT>${this.output}</OUTPUT>
+`;
+
       const config =
-        configHeader + prefixes + src + target + metrics + acceptance + review + ml + execution + configFooter;
+        configHeader + prefixes + src + target + metrics + acceptance + review + ml + execution + output + configFooter;
       return config;
     },
     showConfig() {
@@ -146,6 +150,19 @@ let app = new Vue({
     closeConfig() {
       this.$refs.configDialog.close();
     },
-    execute() {},
+    execute() {
+      const config = this.generateConfig();
+      const configBlob = new Blob([config], {type: 'text/plain'});
+      const fd = new FormData();
+      fd.append('fileupload', configBlob, 'config.xml');
+      fetch('http://localhost:1337/http://localhost:8080/execute', {
+        method: 'post',
+        body: fd,
+      })
+        .then(r => r.text())
+        .then(r => {
+          console.log(r);
+        });
+    },
   },
 });

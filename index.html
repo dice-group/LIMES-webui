@@ -54,6 +54,8 @@
           <mlalgorithm-component v-bind:data="mlalgorithm"></mlalgorithm-component>
           <!-- execution UI -->
           <execution-component v-bind:execution="execution"></execution-component>
+          <!-- output UI -->
+          <output-component v-bind:output="output"></output-component>
 
           <!-- done button -->
           <md-layout md-gutter="16">
@@ -263,6 +265,18 @@
           </md-field>
         </md-layout>
       </md-layout>
+    </md-whiteframe>
+  </script>
+
+  <!-- output component -->
+  <script type="text/x-template" id="outputComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding: 15px;">
+      <div class="md-title">Output</div>
+
+      <md-select v-model="output" name="output" id="output">
+        <md-option value="TAB">TAB</md-option>
+        <md-option value="N3">N3</md-option>
+      </md-select>
     </md-whiteframe>
   </script>
 
