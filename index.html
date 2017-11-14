@@ -34,6 +34,8 @@
           <!-- datasources UI -->
           <datasource-component v-bind:source="source" title="Data source"></datasource-component>
           <datasource-component v-bind:source="target" title="Data target"></datasource-component>
+          <!-- metrics UI -->
+          <metrics-component v-bind:metrics="metrics"></metrics-component>
 
           <!-- done button -->
           <md-button class="md-raised md-primary" v-on:click="execute()">Execute</md-button>
@@ -127,12 +129,20 @@
     </md-whiteframe>
   </script>
 
+  <!-- metrics component -->
+  <script type="text/x-template" id="metricsComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <div class="md-title">Metrics</div>
+      <md-chips v-model="metrics" md-input-placeholder="Add a metric"></md-chips>
+    </md-whiteframe>
+  </script>
+
   <!-- libs -->
   <script src="https://unpkg.com/vue@2.5.3/dist/vue.min.js"></script>
   <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
   <!-- our scripts -->
   <script src="prefixes.js"></script>
-  <script src="datasources.js"></script>
+  <script src="simplecomponents.js"></script>
   <script src="main.js"></script>
 </body>
 

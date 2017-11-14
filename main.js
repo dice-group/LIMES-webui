@@ -36,6 +36,7 @@ let app = new Vue({
       type: 'sparql',
       properties: ['foaf:name AS lowercase RENAME name'],
     },
+    metrics: ['trigrams(y.dc:title, x.linkedct:condition_name)'],
   },
   methods: {
     execute() {
@@ -56,7 +57,14 @@ let app = new Vue({
       const src = makeDatasource(this.source, 'SOURCE');
       const target = makeDatasource(this.target, 'TARGET');
 
-      const config = configHeader + prefixes.join('') + src + target + configFooter;
+      const metrics = this.metrics.map(
+        m => `<METRIC>
+  ${m}
+</METRIC>
+`
+      );
+
+      const config = configHeader + prefixes.join('') + src + target + metrics + configFooter;
       console.log(config);
     },
   },
