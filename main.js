@@ -71,9 +71,9 @@ let app = new Vue({
       ],
     },
     execution: {
-      rewriter: 'default',
-      planner: 'default',
-      engine: 'default',
+      rewriter: 'DEFAULT',
+      planner: 'DEFAULT',
+      engine: 'DEFAULT',
     },
   },
   methods: {

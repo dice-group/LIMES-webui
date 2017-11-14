@@ -15,3 +15,9 @@ Vue.component('accreview-component', {
   template: '#accreviewComponent',
   props: ['data', 'title'],
 });
+
+// Define a new component for execution
+Vue.component('execution-component', {
+  template: '#executionComponent',
+  props: ['execution'],
+});
