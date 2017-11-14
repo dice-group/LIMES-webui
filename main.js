@@ -166,7 +166,7 @@ let app = new Vue({
       const configBlob = new Blob([config], {type: 'text/plain'});
       const fd = new FormData();
       fd.append('fileupload', configBlob, 'config.xml');
-      fetch('http://localhost:1337/http://localhost:8080/execute', {
+      fetch(window.LIMES_SERVER_URL + '/execute', {
         method: 'post',
         body: fd,
       })
@@ -180,7 +180,7 @@ let app = new Vue({
         });
     },
     getStatus() {
-      fetch('http://localhost:1337/http://localhost:8080/get_status/?job_id=' + this.jobId)
+      fetch(window.LIMES_SERVER_URL + '/get_status/?job_id=' + this.jobId)
         .then(r => r.text())
         .then(status => {
           this.jobStatus = status;
