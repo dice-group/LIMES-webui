@@ -36,6 +36,9 @@
           <datasource-component v-bind:source="target" title="Data target"></datasource-component>
           <!-- metrics UI -->
           <metrics-component v-bind:metrics="metrics"></metrics-component>
+          <!-- acceptance UI -->
+          <accreview-component v-bind:data="acceptance" title="Acceptance Condition"></accreview-component>
+          <accreview-component v-bind:data="review" title="Review Condition"></accreview-component>
 
           <!-- done button -->
           <md-button class="md-raised md-primary" v-on:click="execute()">Execute</md-button>
@@ -134,6 +137,26 @@
     <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
       <div class="md-title">Metrics</div>
       <md-chips v-model="metrics" md-input-placeholder="Add a metric"></md-chips>
+    </md-whiteframe>
+  </script>
+
+  <!-- acceptance / review component -->
+  <script type="text/x-template" id="accreview">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <div class="md-title">{{ title }}</div>
+
+      <md-input-container>
+        <label>Threshold</label>
+        <md-input v-model="data.threshold" placeholder="Threshold"></md-input>
+      </md-input-container>
+      <md-input-container>
+        <label>File</label>
+        <md-input v-model="data.file" placeholder="File"></md-input>
+      </md-input-container>
+      <md-input-container>
+        <label>Relation</label>
+        <md-input v-model="data.relation" placeholder="Relation"></md-input>
+      </md-input-container>
     </md-whiteframe>
   </script>
 

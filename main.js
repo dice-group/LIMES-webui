@@ -12,6 +12,13 @@ ${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`)}
 </${tag.toUpperCase()}>
 `;
 
+const makeAccReview = (data, tag) => `<${tag.toUpperCase()}>
+<THRESHOLD>${data.threshold}</THRESHOLD>
+<FILE>${data.file}</FILE>
+<RELATION>${data.relation}</RELATION>
+</${tag.toUpperCase()}>
+`;
+
 // init the app
 let app = new Vue({
   el: '#app',
@@ -37,6 +44,16 @@ let app = new Vue({
       properties: ['foaf:name AS lowercase RENAME name'],
     },
     metrics: ['trigrams(y.dc:title, x.linkedct:condition_name)'],
+    acceptance: {
+      threshold: 0.98,
+      file: 'accepted.nt',
+      relation: 'owl:sameAs',
+    },
+    review: {
+      threshold: 0.95,
+      file: 'reviewme.nt',
+      relation: 'owl:sameAs',
+    },
   },
   methods: {
     execute() {
@@ -64,7 +81,10 @@ let app = new Vue({
 `
       );
 
-      const config = configHeader + prefixes.join('') + src + target + metrics + configFooter;
+      const acceptance = makeAccReview(this.acceptance, 'ACCEPTANCE');
+      const review = makeAccReview(this.review, 'REVIEW');
+
+      const config = configHeader + prefixes.join('') + src + target + metrics + acceptance + review + configFooter;
       console.log(config);
     },
   },
