@@ -66,6 +66,11 @@ let app = new Vue({
         },
       ],
     },
+    execution: {
+      rewriter: 'default',
+      planner: 'default',
+      engine: 'default',
+    },
   },
   methods: {
     execute() {
@@ -117,7 +122,15 @@ let app = new Vue({
 `
         : '';
 
-      const config = configHeader + prefixes + src + target + metrics + acceptance + review + ml + configFooter;
+      const execution = `<EXECUTION>
+  <REWRITER>${this.execution.rewriter}</REWRITER>
+  <PLANNER>${this.execution.planner}</PLANNER>
+  <ENGINE>${this.execution.engine}</ENGINE>
+</EXECUTION>
+`;
+
+      const config =
+        configHeader + prefixes + src + target + metrics + acceptance + review + ml + execution + configFooter;
       console.log(config);
     },
   },
