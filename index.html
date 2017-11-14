@@ -31,9 +31,12 @@
         <md-layout md-flex-offset="25" md-column>
           <!-- prefixes UI -->
           <prefixes-list v-bind:prefixes="prefixes"></prefixes-list>
+          <!-- datasources UI -->
+          <datasource-component v-bind:source="source" title="Data source"></datasource-component>
+          <datasource-component v-bind:source="target" title="Data target"></datasource-component>
 
           <!-- done button -->
-          <md-button v-on:click="execute()">Execute</md-button>
+          <md-button class="md-raised md-primary" v-on:click="execute()">Execute</md-button>
         </md-layout>
         <md-layout md-flex="25"></md-layout>
       </md-layout>
@@ -73,10 +76,63 @@
     </md-whiteframe>
   </script>
 
+  <!-- datasource component -->
+  <script type="text/x-template" id="datasourceComponent">
+    <md-whiteframe md-tag="section" style="flex: 1; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+      <div class="md-title">{{ title }}</div>
+
+      <!-- source -->
+      <md-layout md-column>
+        <md-layout>
+          <md-input-container>
+            <label>ID</label>
+            <md-input v-model="source.id" placeholder="ID"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Endpoint</label>
+            <md-input v-model="source.endpoint" placeholder="Endpoint"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Var</label>
+            <md-input v-model="source.var" placeholder="Var"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Pagesize</label>
+            <md-input v-model="source.pagesize" placeholder="Pagesize"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Restriction</label>
+            <md-input v-model="source.restriction" placeholder="Restriction"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          <md-input-container>
+            <label>Type</label>
+            <md-input v-model="source.type" placeholder="Type"></md-input>
+          </md-input-container>
+        </md-layout>
+        <md-layout>
+          Properties
+          <md-chips v-model="source.properties" md-input-placeholder="Add a property"></md-chips>
+        </md-layout>
+      </md-layout>
+    </md-whiteframe>
+  </script>
+
   <!-- libs -->
   <script src="https://unpkg.com/vue@2.5.3/dist/vue.min.js"></script>
   <script src="https://unpkg.com/vue-material@0.8.1/dist/vue-material.js"></script>
   <!-- our scripts -->
+  <script src="prefixes.js"></script>
+  <script src="datasources.js"></script>
   <script src="main.js"></script>
 </body>
 

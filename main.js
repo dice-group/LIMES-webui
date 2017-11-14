@@ -1,32 +1,16 @@
 // apply vue-material stuff
 Vue.use(VueMaterial);
 
-// Define a new component for prefixes
-Vue.component('prefixes-list', {
-  template: '#prefixComponent',
-  props: ['prefixes'],
-  data() {
-    return {
-      label: '',
-      namespace: '',
-    };
-  },
-  methods: {
-    deleteChip(prefix) {
-      this.prefixes = this.prefixes.filter(p => p.label !== prefix.label && p.namespace !== prefix.namespace);
-    },
-    add() {
-      // push new prefix
-      this.prefixes.push({
-        label: this.label,
-        namespace: this.namespace,
-      });
-      // cleanup
-      this.namespace = '';
-      this.label = '';
-    },
-  },
-});
+const makeDatasource = (data, tag) => `<${tag.toUpperCase()}>
+<ID>${data.id}</ID>
+<ENDPOINT>${data.endpoint}</ENDPOINT>
+<VAR>${data.var}</VAR>
+<PAGESIZE>${data.pagesize}</PAGESIZE>
+<RESTRICTION>${data.restriction}</RESTRICTION>
+<TYPE>${data.type}</TYPE>
+${data.properties.map(p => `<PROPERTY>${p}</PROPERTY>`)}
+</${tag.toUpperCase()}>
+`;
 
 // init the app
 let app = new Vue({
@@ -34,6 +18,24 @@ let app = new Vue({
   template: '#mainApp',
   data: {
     prefixes: [],
+    source: {
+      id: 'sourceId',
+      endpoint: 'http://source.endpoint.com/sparql',
+      var: '?src',
+      pagesize: 1000,
+      restriction: '?src rdf:type some:Type',
+      type: 'sparql',
+      properties: ['dc:title AS lowercase RENAME name'],
+    },
+    target: {
+      id: 'targetId',
+      endpoint: 'http://target.endpoint.com/sparql',
+      var: '?target',
+      pagesize: 1000,
+      restriction: '?target rdf:type other:Type',
+      type: 'sparql',
+      properties: ['foaf:name AS lowercase RENAME name'],
+    },
   },
   methods: {
     execute() {
@@ -51,7 +53,10 @@ let app = new Vue({
 `
       );
 
-      const config = configHeader + prefixes.join('') + configFooter;
+      const src = makeDatasource(this.source, 'SOURCE');
+      const target = makeDatasource(this.target, 'TARGET');
+
+      const config = configHeader + prefixes.join('') + src + target + configFooter;
       console.log(config);
     },
   },
