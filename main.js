@@ -85,6 +85,15 @@ let app = new Vue({
     },
     output: 'TAB',
   },
+  mounted() {
+    const jobIdmatches = /\?jobId=(.+)/.exec(window.location.search);
+    if (jobIdmatches) {
+      const jobId = jobIdmatches[1];
+      this.jobId = jobId;
+      setTimeout(() => this.$refs.jobDialog.open(), 10);
+      setTimeout(() => this.getStatus(), 1000);
+    }
+  },
   methods: {
     generateConfig() {
       const configHeader = `<?xml version="1.0" encoding="UTF-8"?>
@@ -176,6 +185,7 @@ let app = new Vue({
           this.jobRunning = true;
           this.jobStatusText = 'Status Loading - waiting for status from server..';
           this.$refs.jobDialog.open();
+          history.pushState({jobId: r}, '', `?jobId=${r}`);
           setTimeout(() => this.getStatus(), 1000);
         });
     },

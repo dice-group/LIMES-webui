@@ -57,7 +57,7 @@
           <div class="md-flex">
             {{ jobStatusText }}
           </div>
-          <div class="md-flex">
+          <div class="md-flex" v-if="jobStatus === '2'">
             Get results:
             <a v-bind:href=" window.LIMES_SERVER_URL + '/get_result/?job_id=' + jobId + '&result_type=acceptance' ">Acceptance</a>
             <a v-bind:href=" window.LIMES_SERVER_URL + '/get_result/?job_id=' + jobId + '&result_type=review' ">Review</a>
