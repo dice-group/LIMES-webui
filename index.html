@@ -54,8 +54,11 @@
           <div class="md-flex">
             <md-spinner md-indeterminate v-if="jobRunning"></md-spinner>
           </div>
-          <div class="md-flex">
+          <div class="md-flex" v-if="!jobError">
             {{ jobStatusText }}
+          </div>
+          <div class="md-flex" style="color: red;" v-if="jobError">
+            {{ jobError }}
           </div>
           <div class="md-flex" v-if="jobStatus === '2'">
             Get results:

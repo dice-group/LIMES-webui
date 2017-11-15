@@ -33,6 +33,7 @@ let app = new Vue({
     jobShowResult: false,
     jobStatus: '-1',
     jobStatusText: 'loading..',
+    jobError: false,
     // config
     prefixes: [],
     source: {
@@ -90,6 +91,7 @@ let app = new Vue({
     if (jobIdmatches) {
       const jobId = jobIdmatches[1];
       this.jobId = jobId;
+      this.jobRunning = true;
       setTimeout(() => this.$refs.jobDialog.open(), 10);
       setTimeout(() => this.getStatus(), 1000);
     }
@@ -168,9 +170,11 @@ let app = new Vue({
       this.$refs.configDialog.close();
     },
     closeStatus() {
+      history.pushState({}, '', '?');
       this.$refs.jobDialog.close();
     },
     execute() {
+      this.jobError = false;
       const config = this.generateConfig();
       const configBlob = new Blob([config], {type: 'text/plain'});
       const fd = new FormData();
@@ -183,16 +187,23 @@ let app = new Vue({
         .then(r => {
           this.jobId = r;
           this.jobRunning = true;
+          this.jobError = false;
           this.jobStatusText = 'Status Loading - waiting for status from server..';
           this.$refs.jobDialog.open();
           history.pushState({jobId: r}, '', `?jobId=${r}`);
           setTimeout(() => this.getStatus(), 1000);
+        })
+        .catch(e => {
+          this.jobError = `Error while starting the job: ${e.toString()}`;
+          this.jobRunning = false;
         });
     },
     getStatus() {
+      this.jobError = false;
       fetch(window.LIMES_SERVER_URL + '/get_status/?job_id=' + this.jobId)
         .then(r => r.text())
         .then(status => {
+          this.jobError = false;
           this.jobStatus = status;
           if (status === '-1') {
             this.jobRunning = false;
@@ -215,6 +226,10 @@ let app = new Vue({
             this.jobStatusText = 'Status Finished - the job is finished and its output files are ready for delivery';
             this.jobShowResult = true;
           }
+        })
+        .catch(e => {
+          this.jobError = `Error getting job status: ${e.toString()}`;
+          this.jobRunning = false;
         });
     },
     exampleConfig() {
