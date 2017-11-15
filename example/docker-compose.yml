@@ -1,0 +1,13 @@
+version: '3'
+services:
+  webui:
+    build: ../
+    ports:
+      - 3000:80
+    environment:
+      - LIMES_URL=http://localhost:8080
+
+  limes:
+    image: dicegroup/limes
+    ports:
+      - 8080:8080

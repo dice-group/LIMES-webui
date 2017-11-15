@@ -1,7 +1,8 @@
 FROM nginx:latest
 
 # copy files
-COPY . /usr/share/nginx/html
+COPY ./src /usr/share/nginx/html
+COPY start.sh /usr/share/nginx/html
 
 # set default limes url
 ENV LIMES_URL=http://localhost:8080
